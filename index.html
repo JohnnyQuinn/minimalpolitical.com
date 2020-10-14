@@ -13,15 +13,17 @@
     </head>
 
     <body>
-        <h1>Insert a lawmaker's name below</h1>
-        <input type="text" placeholder="Search for a lawmaker..." id="search-bar">
-        <div><ul id="autocomplete-list"></ul></div>
-        <section>
+        <h1>minimal political</h1>
+        <div id="search-bar-container">
+            <input type="text" placeholder="Search for a lawmaker..." id="search-bar">
+            <div id="autocomplete-container"><ul id="autocomplete-list"></ul></div>
+        </div>
+        <div id="lawmaker-info">
             <!--Placeholders-->
             <h2>Name: </h2><p id="id-name"></p>
             <h2>State: </h2><p id="id-state"></p>
             <h2>Party: </h2><p id="id-party"></p>
-        </section>
+        </div>
 
         <script type="module" src="./script.js"></script>
     </body>

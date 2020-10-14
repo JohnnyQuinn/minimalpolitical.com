@@ -1,0 +1,39 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: monospace;
+    position: relative;
+    z-index: 0; 
+}
+
+#search-bar {
+    width: 100%;
+    font-size: 1.25em;
+}
+
+#lawmaker-info {
+    margin-top: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 15%;
+    border: solid;
+    border-width: 2px;
+    border-radius: 4px;
+    font-size: 1.25em;
+    padding: 1.25em;
+}
+
+#autocomplete-container {
+    width: 25%;
+    position: absolute;
+    z-index: 1;
+    background-color: white;
+    border: solid;
+    border-width: 2px;
+}
+
+#search-bar-container {
+    width: 25%;
+}

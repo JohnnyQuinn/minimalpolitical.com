@@ -1,12 +1,20 @@
-import data from './lawmaker-data.js' //imports placeholder data
-
 //store DOM elements into variables
 const searchbarInput = document.querySelector('#search-bar')
 const autoList = document.querySelector('#autocomplete-list')
 const idName = document.querySelector('#id-name')
 const idState = document.querySelector('#id-state')
 const idParty = document.querySelector('#id-party')
+let members
 
+/* */
+$.ajax({
+    url: "https://api.propublica.org/congress/v1/116/senate/members.json",
+    beforeSend: function(xhr) {
+         xhr.setRequestHeader("X-API-Key", "Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw")
+    }, success: function(data){
+       members = data.results[0].members
+       console.log("Data retrieval successful!")
+}});
 
 //display searchbar suggestions
 function searchbarSuggest() {
@@ -18,9 +26,9 @@ function searchbarSuggest() {
 
     //runs through data names and compares search with names
     if(searchbarValue != ''){
-        for(let i=0; i<data.length; ++i){
-            dataFirstName = (data[i].first_name).toLowerCase()  //converts names from lawmaker-data to lowercase
-            dataLastName = (data[i].last_name).toLowerCase()
+        for(let i=0; i<members.length; ++i){
+            dataFirstName = (members[i].first_name).toLowerCase()  //converts names from lawmaker-data to lowercase
+            dataLastName = (members[i].last_name).toLowerCase()
             
             if(dataFirstName.substr(0, searchbarValue.length) == searchbarValue){   //if the search matches any part of data.first_name
                 autoList.appendChild(createSugContainer(i))
@@ -38,14 +46,14 @@ function searchbarSuggest() {
 //creates element for autocomplete suggestion
 function createSugContainer(dataIndex) {
     const suggestionContainer = document.createElement("li")
-    suggestionContainer.innerHTML = `${data[dataIndex].first_name} ${data[dataIndex].last_name}`
-    suggestionContainer.id = `${data[dataIndex].first_name}-${data[dataIndex].last_name}`
+    suggestionContainer.innerHTML = `${members[dataIndex].first_name} ${members[dataIndex].last_name}`
+    suggestionContainer.id = `${members[dataIndex].first_name}-${members[dataIndex].last_name}`
     suggestionContainer.addEventListener('click', function(e) {
         clearList()
         searchbarInput.value = ''
-        idName.innerText = `${data[dataIndex].first_name}  ${data[dataIndex].last_name}`
-        idState.innerText = data[dataIndex].state
-        idParty.innerText = data[dataIndex].party
+        idName.innerText = `${members[dataIndex].first_name}  ${members[dataIndex].last_name}`
+        idState.innerText = members[dataIndex].state
+        idParty.innerText = getInfo('party', dataIndex)
     })
     return suggestionContainer
 }
@@ -56,26 +64,16 @@ function clearList() {
     }
 }
 
-searchbarInput.addEventListener('input', searchbarSuggest)
-
-var HttpClient = function() {
-    this.get = function(aUrl, aCallback) {
-        var anHttpRequest = new XMLHttpRequest();
-        anHttpRequest.onreadystatechange = function() { 
-            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                aCallback(anHttpRequest.responseText);
+function getInfo(info, dataIndex) {
+    if(info == 'party') {
+        if(members[dataIndex].party == "R"){
+            return "Republican"
         }
-
-        anHttpRequest.open( "GET", aUrl, true );            
-        anHttpRequest.send( null );
+        if(members[dataIndex].party == "D"){
+            return "Democrat"
+        }
     }
 }
 
-$.ajax({
-    url: "https://api.propublica.org/congress/v1/116/senate/members.json",
-    beforeSend: function(xhr) {
-         xhr.setRequestHeader("X-API-Key", "Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw")
-    }, success: function(data){
-       console.log(data)
-    }
-})
+searchbarInput.addEventListener('input', searchbarSuggest)
+
