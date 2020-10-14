@@ -1,4 +1,4 @@
-lawmakerData = [
+const lawmakerData = [
     {
         "first_name": "Mitch",
         "last_name": "McConnell",
@@ -9,12 +9,14 @@ lawmakerData = [
         "first_name": "Chuck",
         "last_name": "Schumer",
         "state": "New York",
-        "party": "Democrat"
+        "party": "Democrat",
     },
     {
         "first_name": "Nancy",
         "last_name": "Pelosi",
         "state": "California",
-        "party": "Democrat"
+        "party": "Democrat",
     }
 ]
+
+export default lawmakerData;
