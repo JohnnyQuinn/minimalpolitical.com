@@ -7,29 +7,6 @@ const idName = document.querySelector('#id-name')
 const idState = document.querySelector('#id-state')
 const idParty = document.querySelector('#id-party')
 
-/*
-Handler function to evaluate user's input into the search bar
-*/
-function evalSearch(){
-    const searchbarValue = (searchbarInput.value).toLowerCase()
-    console.log(searchbarValue)
-
-    let dataFirstName = ""
-    let dataLastName = ""
-
-    //runs through lawmaker-data.js
-    for(let i=0; i<data.length; ++i){
-        dataFirstName = (data[i].first_name).toLowerCase()  //converts names from lawmaker-data to lowercase
-        dataLastName = (data[i].last_name).toLowerCase()
-
-        //if search bar input matches then display info
-        if(searchbarValue.includes(dataFirstName) || searchbarValue.includes(dataLastName)){ 
-            idName.innerText = `${data[i].first_name}  ${data[i].last_name}`
-            idState.innerText = data[i].state
-            idParty.innerText = data[i].party
-        }
-    }
-}
 
 //display searchbar suggestions
 function searchbarSuggest() {
@@ -56,7 +33,6 @@ function searchbarSuggest() {
             }
         }
     }
-    autoList.chil
 }
 
 //creates element for autocomplete suggestion
@@ -80,5 +56,26 @@ function clearList() {
     }
 }
 
-// searchbarInput.addEventListener('input', evalSearch)
 searchbarInput.addEventListener('input', searchbarSuggest)
+
+var HttpClient = function() {
+    this.get = function(aUrl, aCallback) {
+        var anHttpRequest = new XMLHttpRequest();
+        anHttpRequest.onreadystatechange = function() { 
+            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                aCallback(anHttpRequest.responseText);
+        }
+
+        anHttpRequest.open( "GET", aUrl, true );            
+        anHttpRequest.send( null );
+    }
+}
+
+$.ajax({
+    url: "https://api.propublica.org/congress/v1/116/senate/members.json",
+    beforeSend: function(xhr) {
+         xhr.setRequestHeader("X-API-Key", "Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw")
+    }, success: function(data){
+       console.log(data)
+    }
+})
