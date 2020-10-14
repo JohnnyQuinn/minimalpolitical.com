@@ -16,6 +16,12 @@ const lawmakerData = [
         "last_name": "Pelosi",
         "state": "California",
         "party": "Democrat",
+    },
+    {
+        "first_name": "Mitch",
+        "last_name": "Mitchelton",
+        "state": "Mitchville",
+        "party": "Mitchy",
     }
 ]
 
