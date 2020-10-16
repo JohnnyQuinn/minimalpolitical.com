@@ -1,79 +1,144 @@
 //store DOM elements into variables
 const searchbarInput = document.querySelector('#search-bar')
+const autoListContainer = document.querySelector('#autocomplete-container')
 const autoList = document.querySelector('#autocomplete-list')
 const idName = document.querySelector('#id-name')
 const idState = document.querySelector('#id-state')
 const idParty = document.querySelector('#id-party')
-let members
+let senateMembers
+let houseMembers
 
-/* */
+/*Retrieves data from API
+
+Link uses parameters after the congress/v1/ 
+
+Key to access API: Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw
+*/
 $.ajax({
     url: "https://api.propublica.org/congress/v1/116/senate/members.json",
     beforeSend: function(xhr) {
          xhr.setRequestHeader("X-API-Key", "Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw")
     }, success: function(data){
-       members = data.results[0].members
-       console.log("Data retrieval successful!")
-}});
+       senateMembers = data.results[0].members
+       console.log(senateMembers)
+       console.log("Senate member list data retrieval successful!")
+    }
+});
+$.ajax({
+    url: "https://api.propublica.org/congress/v1/116/house/members.json",
+    beforeSend: function(xhr) {
+         xhr.setRequestHeader("X-API-Key", "Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw")
+    }, success: function(data){
+       houseMembers = data.results[0].members
+       console.log(houseMembers)
+       console.log("House member list data retrieval successful!")
+    }
+});
 
 //display searchbar suggestions
 function searchbarSuggest() {
     clearList()
-    const searchbarValue = (searchbarInput.value).toLowerCase()
-    
+    const searchbarValue = (searchbarInput.value).toLowerCase()     //converts search bar value to lowercase
+
     let dataFirstName = ""
     let dataLastName = ""
 
     //runs through data names and compares search with names
     if(searchbarValue != ''){
-        for(let i=0; i<members.length; ++i){
-            dataFirstName = (members[i].first_name).toLowerCase()  //converts names from lawmaker-data to lowercase
-            dataLastName = (members[i].last_name).toLowerCase()
+        autoListContainer.style.display = 'block'           //displays autocomplete list when user types
+        //senate members
+        for(let i=0; i<senateMembers.length; ++i){
+            dataFirstName = (senateMembers[i].first_name).toLowerCase()     //converts names from lawmaker-data to lowercase
+            dataLastName = (senateMembers[i].last_name).toLowerCase()
             
-            if(dataFirstName.substr(0, searchbarValue.length) == searchbarValue){   //if the search matches any part of data.first_name
-                autoList.appendChild(createSugContainer(i))
+            if(dataFirstName.substr(0, searchbarValue.length) == searchbarValue){       //if the search matches any part of data.first_name
+                autoList.appendChild(createSugContainer(senateMembers[i]))
             }
-            else if (dataLastName.substr(0, searchbarValue.length) == searchbarValue){  //if the search matches any part of data.last_name
-                autoList.appendChild(createSugContainer(i))
+            else if (dataLastName.substr(0, searchbarValue.length) == searchbarValue){      //if the search matches any part of data.last_name
+                autoList.appendChild(createSugContainer(senateMembers[i]))
             }
             else if ((`${dataFirstName} ${dataLastName}`).substr(0, searchbarValue.length) == searchbarValue){
-                autoList.appendChild(createSugContainer(i))
+                autoList.appendChild(createSugContainer(senateMembers[i]))
             }
+        }
+        //house members
+        for(let i=0; i<houseMembers.length; ++i){
+            dataFirstName = (houseMembers[i].first_name).toLowerCase()      //converts names from lawmaker-data to lowercase
+            dataLastName = (houseMembers[i].last_name).toLowerCase()
+            
+            if(dataFirstName.substr(0, searchbarValue.length) == searchbarValue){       //if the search matches any part of data.first_name
+                autoList.appendChild(createSugContainer(houseMembers[i]))
+            }
+            else if (dataLastName.substr(0, searchbarValue.length) == searchbarValue){      //if the search matches any part of data.last_name
+                autoList.appendChild(createSugContainer(houseMembers[i]))
+            }
+            else if ((`${dataFirstName} ${dataLastName}`).substr(0, searchbarValue.length) == searchbarValue){
+                autoList.appendChild(createSugContainer(houseMembers[i]))
+            } 
         }
     }
 }
 
 //creates element for autocomplete suggestion
-function createSugContainer(dataIndex) {
+function createSugContainer(memberIndex) {
     const suggestionContainer = document.createElement("li")
-    suggestionContainer.innerHTML = `${members[dataIndex].first_name} ${members[dataIndex].last_name}`
-    suggestionContainer.id = `${members[dataIndex].first_name}-${members[dataIndex].last_name}`
+    suggestionContainer.innerHTML = getInfo('name', memberIndex)
+    suggestionContainer.id = getInfo('name', memberIndex)
     suggestionContainer.addEventListener('click', function(e) {
         clearList()
         searchbarInput.value = ''
-        idName.innerText = `${members[dataIndex].first_name}  ${members[dataIndex].last_name}`
-        idState.innerText = members[dataIndex].state
-        idParty.innerText = getInfo('party', dataIndex)
+        idName.innerText = getInfo('name', memberIndex)
+        idState.innerText = getInfo('state', memberIndex)
+        idParty.innerText = getInfo('party', memberIndex)
+        getBillInfo(memberIndex)
     })
+    suggestionContainer.onmouseover = 'this.style.textDecoration="underline";'
     return suggestionContainer
 }
 
+//clears autocomplete list
 function clearList() {
+    autoListContainer.style.display = 'none'        //hides autocomplete list
     while(autoList.firstChild){
         autoList.removeChild(autoList.firstChild)
     }
 }
 
-function getInfo(info, dataIndex) {
+//returns basic info of a particular member based on index within data
+function getInfo(info, memberIndex) {
+    if(info == 'name'){
+        return `${memberIndex.first_name}  ${memberIndex.last_name}`
+    }
     if(info == 'party') {
-        if(members[dataIndex].party == "R"){
+        if(memberIndex.party == "R"){
             return "Republican"
         }
-        if(members[dataIndex].party == "D"){
+        if(memberIndex.party == "D"){
             return "Democrat"
         }
     }
+    if(info == 'state'){
+        return memberIndex.state
+    }
+    if(info == 'id'){
+        return memberIndex.id
+    }
 }
 
+function getBillInfo(memberIndex){
+    let id = getInfo('id', memberIndex)
+    $.ajax({
+        url: `https://api.propublica.org/congress/v1/members/${id}/votes.json`,
+        beforeSend: function(xhr) {
+             xhr.setRequestHeader("X-API-Key", "Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw")
+        }, success: function(data){
+           const billInfo = data.results[0].votes
+           console.log(billInfo)
+           console.log("Bill info data retrieval successful!")
+        }
+    });
+}
+
+//when user types in to search bar, the autocomplete process runs
 searchbarInput.addEventListener('input', searchbarSuggest)
 

@@ -12,12 +12,19 @@ body {
     font-size: 1.25em;
 }
 
-#lawmaker-info {
-    margin-top: 1em;
+#data-display {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#data-display > div {
+    width: 502%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 15%;
+    margin-top: 1em;
     border: solid;
     border-width: 2px;
     border-radius: 4px;
@@ -32,6 +39,12 @@ body {
     background-color: white;
     border: solid;
     border-width: 2px;
+    display: none;
+}
+
+#autocomplete-list {
+    list-style: none;
+    font-size: 1.25em;
 }
 
 #search-bar-container {
