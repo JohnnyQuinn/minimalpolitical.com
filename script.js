@@ -5,8 +5,12 @@ const autoList = document.querySelector('#autocomplete-list')
 const idName = document.querySelector('#id-name')
 const idState = document.querySelector('#id-state')
 const idParty = document.querySelector('#id-party')
+const billTitle = document.getElementById('bill-title')
+const billDate = document.querySelector('#bill-date')
+const billVote = document.querySelector('#bill-vote')
 let senateMembers
 let houseMembers
+let billInfo
 
 /*Retrieves data from API
 
@@ -85,14 +89,16 @@ function createSugContainer(memberIndex) {
     suggestionContainer.innerHTML = getInfo('name', memberIndex)
     suggestionContainer.id = getInfo('name', memberIndex)
     suggestionContainer.addEventListener('click', function(e) {
+        getBillInfo(memberIndex)
         clearList()
         searchbarInput.value = ''
         idName.innerText = getInfo('name', memberIndex)
         idState.innerText = getInfo('state', memberIndex)
         idParty.innerText = getInfo('party', memberIndex)
-        getBillInfo(memberIndex)
+        console.log("clicked")
+        billTitle.innerText = String(billInfo)
+        console.log(billInfo)
     })
-    suggestionContainer.onmouseover = 'this.style.textDecoration="underline";'
     return suggestionContainer
 }
 
@@ -130,11 +136,11 @@ function getBillInfo(memberIndex){
     $.ajax({
         url: `https://api.propublica.org/congress/v1/members/${id}/votes.json`,
         beforeSend: function(xhr) {
-             xhr.setRequestHeader("X-API-Key", "Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw")
+            xhr.setRequestHeader("X-API-Key", "Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw")
         }, success: function(data){
-           const billInfo = data.results[0].votes
-           console.log(billInfo)
-           console.log("Bill info data retrieval successful!")
+            billInfo = data.results[0].votes[0].description
+            console.log(billInfo)
+            console.log("Bill info data retrieval successful!")
         }
     });
 }
