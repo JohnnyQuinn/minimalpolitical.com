@@ -136,17 +136,22 @@ function getBillInfo(id){
         beforeSend: function(xhr) {
             xhr.setRequestHeader("X-API-Key", "Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw")
         }, success: function(data){
-            let billInfo = data.results[0].votes[0].description
+            let billInfo = data.results[0].votes[0]
+            let billTitle = data.results[0].votes[0].bill.title
+            let billDate = data.results[0].votes[0].date
+            let billVote = data.results[0].votes[0].position
+            console.log(billInfo)
             console.log("Bill info data retrieval successful!")
             // billTitle.innerText = billInfo
-            displayBillInfo(billInfo)
+            displayBillInfo(billTitle, billDate, billVote)
         }
     });
 }
 
-function displayBillInfo(billInfo) {
-    let title = billInfo
+function displayBillInfo(title, date, vote) {
     billTitle.innerText = title
+    billDate.innerText = date
+    billVote.innerText = vote
 }
 
 //when user types in to search bar, the autocomplete process runs
