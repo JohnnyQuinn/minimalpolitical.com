@@ -10,7 +10,7 @@ const billDate = document.querySelector('#bill-date')
 const billVote = document.querySelector('#bill-vote')
 let senateMembers
 let houseMembers
-let billInfo
+let currentID
 
 /*Retrieves data from API
 
@@ -86,18 +86,16 @@ function searchbarSuggest() {
 //creates element for autocomplete suggestion
 function createSugContainer(memberIndex) {
     const suggestionContainer = document.createElement("li")
-    suggestionContainer.innerHTML = getInfo('name', memberIndex)
-    suggestionContainer.id = getInfo('name', memberIndex)
+    suggestionContainer.innerHTML = getLawmakerInfo('name', memberIndex)
+    suggestionContainer.id = getLawmakerInfo('name', memberIndex)
     suggestionContainer.addEventListener('click', function(e) {
-        getBillInfo(memberIndex)
         clearList()
         searchbarInput.value = ''
-        idName.innerText = getInfo('name', memberIndex)
-        idState.innerText = getInfo('state', memberIndex)
-        idParty.innerText = getInfo('party', memberIndex)
-        console.log("clicked")
-        billTitle.innerText = String(billInfo)
-        console.log(billInfo)
+        currentID = getLawmakerInfo('id', memberIndex)
+        idName.innerText = getLawmakerInfo('name', memberIndex)
+        idState.innerText = getLawmakerInfo('state', memberIndex)
+        idParty.innerText = getLawmakerInfo('party', memberIndex)
+        getBillInfo(currentID)
     })
     return suggestionContainer
 }
@@ -110,8 +108,8 @@ function clearList() {
     }
 }
 
-//returns basic info of a particular member based on index within data
-function getInfo(info, memberIndex) {
+//returns basic info of a particular lawmaker based on index within data
+function getLawmakerInfo(info, memberIndex) {
     if(info == 'name'){
         return `${memberIndex.first_name}  ${memberIndex.last_name}`
     }
@@ -131,18 +129,24 @@ function getInfo(info, memberIndex) {
     }
 }
 
-function getBillInfo(memberIndex){
-    let id = getInfo('id', memberIndex)
+function getBillInfo(id){
+    id = currentID
     $.ajax({
         url: `https://api.propublica.org/congress/v1/members/${id}/votes.json`,
         beforeSend: function(xhr) {
             xhr.setRequestHeader("X-API-Key", "Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw")
         }, success: function(data){
-            billInfo = data.results[0].votes[0].description
-            console.log(billInfo)
+            let billInfo = data.results[0].votes[0].description
             console.log("Bill info data retrieval successful!")
+            // billTitle.innerText = billInfo
+            displayBillInfo(billInfo)
         }
     });
+}
+
+function displayBillInfo(billInfo) {
+    let title = billInfo
+    billTitle.innerText = title
 }
 
 //when user types in to search bar, the autocomplete process runs
