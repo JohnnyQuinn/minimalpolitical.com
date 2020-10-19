@@ -6,9 +6,7 @@ const idName = document.querySelector('#id-name')
 const idState = document.querySelector('#id-state')
 const idParty = document.querySelector('#id-party')
 const lawmakerInfo = document.querySelector('#lawmaker-info')
-const billTitle = document.getElementById('bill-title')
-const billDate = document.querySelector('#bill-date')
-const billVote = document.querySelector('#bill-vote')
+const billCardsContainer = document.querySelector('#bill-cards-container')
 let senateMembers
 let houseMembers
 let currentID
@@ -42,7 +40,7 @@ $.ajax({
 
 //display searchbar suggestions
 function searchbarSuggest() {
-    clearList()
+    clearSugList()
     const searchbarValue = (searchbarInput.value).toLowerCase()     //converts search bar value to lowercase
 
     let dataFirstName = ""
@@ -90,13 +88,13 @@ function createSugContainer(memberIndex) {
     suggestionContainer.innerHTML = getLawmakerInfo('name', memberIndex)
     suggestionContainer.id = getLawmakerInfo('name', memberIndex)
     suggestionContainer.addEventListener('click', function(e) {
-        clearList()
+        clearSugList()
         searchbarInput.value = ''
         currentID = getLawmakerInfo('id', memberIndex)
         idName.innerText = getLawmakerInfo('name', memberIndex)
         idState.innerText = getLawmakerInfo('state', memberIndex)
         idParty.innerText = getLawmakerInfo('party', memberIndex)
-        getBillInfo(currentID)
+        getBillData(currentID)
     })
     suggestionContainer.addEventListener('mouseenter', function(e){
         event.target.style.backgroundColor = '#00FFFF';
@@ -108,7 +106,7 @@ function createSugContainer(memberIndex) {
 }
 
 //clears autocomplete list
-function clearList() {
+function clearSugList() {
     autoListContainer.style.display = 'none'        //hides autocomplete list
     while(autoList.firstChild){
         autoList.removeChild(autoList.firstChild)
@@ -136,7 +134,8 @@ function getLawmakerInfo(info, memberIndex) {
     }
 }
 
-function getBillInfo(id){
+//Takes in member id, then recieves most 20 most recently voted on bills
+function getBillData(id){
     id = currentID
     $.ajax({
         url: `https://api.propublica.org/congress/v1/members/${id}/votes.json`,
@@ -144,43 +143,81 @@ function getBillInfo(id){
             xhr.setRequestHeader("X-API-Key", "Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw")
         }, success: function(data){
             let billInfo = data.results[0]
-            let billTitle = data.results[0].votes[0].bill.title
-            let billDate = data.results[0].votes[0].date
-            let billVote = data.results[0].votes[0].position
             console.log(billInfo)
             console.log("Bill info data retrieval successful!")
-            displayBillInfo(billTitle, billDate, billVote)
+            setBillCards(billInfo)
         }
     });
 }
 
-function displayBillInfo(title, date, vote) {
-    for(let i; i<=5; i++){
-
+//sets billcard info based on last 5 voted on bills
+function setBillCards(data) {
+    clearBillList()
+    let date
+    let title
+    let vote
+    for(let i = 0; i<5; i++){
+        date = data.votes[i].date
+        title = data.votes[i].bill.title
+        vote = data.votes[i].position
+        makeBillCard(date, title, vote)
     }
-    billTitle.innerText = title
-    billDate.innerText = date
-    billVote.innerText = vote
 }
 
-function makeBillCard() {
-    billCard = document.createElementw('div')
-    billCard.class = 'bill-card'
+//creates and styles bill cards
+function makeBillCard(date, title, vote) {
+    //make elements
+    const billCard = document.createElement('div')
+    billCard.class = 'bill-cards'
 
-    dateText = document.createElement('h3')
-    dateText.innerText = 'Date: '
-    billDate = document.createElement('p') 
-    billDate.class = 'bill-date'
+    const billDate = document.createElement('p') 
+    billDate.id = 'bill-date'
+    billDate.innerText = date;
 
-    titleText = document.createElement('h3')
-    titleText.innerText = 'Title: '
-    billTitle = document.createElement('p')
-    billTitle.class = 'bill-title'
+    const billTitle = document.createElement('p')
+    billTitle.id = 'bill-title'
+    console.log(title)
+    billTitle.innerText = title
 
-    voteText = document.createElement('h3')
-    voteText.innerText = 'Vote: '
-    billVote = document.createElement('p')
-    billVote.class = 'bill-vote'
+    const billVote = document.createElement('p')
+    billVote.id = 'bill-vote'
+    billVote.innerText = vote
+
+    // const expandButton = document.createElement('button')
+    // expandButton.id = 'expand'
+    // expandButton.innerText = 'V'
+
+    //style elements
+    billCard.style.borderTop = 'solid'
+    // billCard.style.borderBottom = 'solid'
+    billCard.style.borderWidth = '0.75px'
+    billCard.style.display = 'flex'
+    billCard.style.flexDirection = 'row'
+    billCard.style.height = '3em'
+    billCard.style.overflow = 'hidden'
+    billCard.style.padding = '1em'
+
+    billCard.appendChild(billDate)
+    billCard.appendChild(billTitle)
+    billCard.appendChild(billVote)
+    // billCard.appendChild(expandButton)
+
+    billCardsContainer.appendChild(billCard)
+}
+
+//clears bill cards
+function clearBillList() {
+    while(billCardsContainer.firstChild){
+        billCardsContainer.removeChild(billCardsContainer.firstChild)
+    }
+}
+
+function truncateText(text, maxLength) {
+    let truncated = text
+    if (text.length > maxLength) {
+        truncated = text.substr(0,maxLength) + '...';
+    }
+    return truncated;
 }
 
 //when user types in to search bar, the autocomplete process runs
