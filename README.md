@@ -13,6 +13,7 @@ Search for any lawmakers in Congress that are currently in office and get their 
 ### MVP:
 * Be able to search through all the bills that the searched lawmaker has voted on
 * Be able to click on the bills and display more information
+* Update styling (colors, fonts, overall layout)
 * display data on the lawmaker and the bills they voted on with simple visual data representation (graphs)
 
 ### Long Term:
@@ -22,3 +23,6 @@ Search for any lawmakers in Congress that are currently in office and get their 
 * timelines (voting history, financial actions, etc)
 * search for a particular bill 
 * compare lawmakers/bills
+
+## How it will be built
+Using [ProPublica's Congress API](https://projects.propublica.org/api-docs/congress-api/), there is an abundance of data on Congress available. Right now all the data is being called and retrieved in the JS file. The data is stored in array which can be easily navigated through. Using and displaying the data will continue to be done using the arrays from the API. In the near future, the data will be retrieved in the backend instead of in JS. 
