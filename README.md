@@ -25,4 +25,4 @@ Search for any lawmakers in Congress that are currently in office and get their 
 * compare lawmakers/bills
 
 ## How it will be built
-Using [ProPublica's Congress API](https://projects.propublica.org/api-docs/congress-api/), there is an abundance of data on Congress available. Right now all the data is being called and retrieved in the JS file. The data is stored in array which can be easily navigated through. Using and displaying the data will continue to be done using the arrays from the API. In the near future, the data will be retrieved in the backend instead of in JS. 
+Using [ProPublica's Congress API](https://projects.propublica.org/api-docs/congress-api/), there is an abundance of data on Congress available. Right now all the data is being called and retrieved in the JS file. The data is stored in an array which can be easily navigated through. Using and displaying the data will continue to be done using the arrays from the API. In the near future, the data will be retrieved in the backend instead of in JS. 
