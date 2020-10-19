@@ -1,35 +1,26 @@
+html, body {
+    height: 100%;
+}
+
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
     font-family: monospace;
     position: relative;
-    z-index: 0; 
+    z-index: 0;
 }
+/*-----------------------SEARCH BAR AND AUTOCOMPLETE SUGGESTIONS-----------------------------*/
+#search-bar-container {
+    width: 25%;
+} 
 
 #search-bar {
     width: 100%;
     font-size: 1.25em;
-}
-
-#data-display {
-    width: 50%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
-#data-display > div {
-    width: 502%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: 1em;
     border: solid;
     border-width: 2px;
     border-radius: 4px;
-    font-size: 1.25em;
-    padding: 1.25em;
 }
 
 #autocomplete-container {
@@ -46,7 +37,82 @@ body {
     list-style: none;
     font-size: 1.25em;
 }
-
-#search-bar-container {
-    width: 25%;
+/*------------------------------LAWMAKER AND BILL INFO CARDS--------------------------------*/
+#data-display {
+    margin-top: 1em;
+    width: 80%;
+    height: 70%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
+
+#data-display > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.cards {
+    border: solid;
+    border-width: 2px;
+    border-radius: 2px;
+    font-size: 1.25em;
+    height: 100%;
+    overflow: hidden;
+}
+
+/*-------------------------------LEFT CARD-------------------------------------------------*/
+
+#left-card {
+    width: 20%;
+    margin-right: 2em;
+}
+
+#lawmaker-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding-left: 1em;
+    width: 100%;
+}
+
+/*-------------------------------RIGHT CARD-------------------------------------------------*/
+
+#right-card {
+    width: 60%;
+}
+
+#bill-info {
+    display: flex;
+    flex-direction: column;
+    border-width: 2px;
+    width: 100%;
+}
+
+#bill-info > section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 20%;
+}
+
+.bill-cards {
+    border: solid;
+    border-width: 0.75px;
+    display: flex;
+    flex-direction: row;
+    height: 15%;
+    overflow: hidden;
+}
+
+#bill-title {
+    margin: 0.25em 0 0.25em 0;
+    padding: 0 1em 0 1em;
+}
+
+
+
+

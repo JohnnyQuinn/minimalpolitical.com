@@ -19,17 +19,30 @@
             <div id="autocomplete-container"><ul id="autocomplete-list"></ul></div>
         </div>
         <div id="data-display">
-            <div id="lawmaker-info">
+            <div id="left-card">
                 <h2>Lawmaker</h2>
-                <h3>Name: </h3><p id="id-name"></p>
-                <h3>State: </h3><p id="id-state"></p>
-                <h3>Party: </h3><p id="id-party"></p>
+                <div id="lawmaker-info" class="cards">
+                    <section>
+                        <h3>Name: </h3><p id="id-name"></p>
+                    </section>
+                    <section>
+                        <h3>State: </h3><p id="id-state"></p>
+                    </section>
+                    <section>
+                        <h3>Party: </h3><p id="id-party"></p>
+                    </section>
+                </div>
             </div>
-            <div id="bill-info">
-                <h2>Bill</h2>
-                <h3>Title: </h3><p id="bill-title"></p>
-                <h3>Date: </h3><p id="bill-date"></p>
-                <h3>Vote: </h3><p id="bill-vote"></p>
+            <div id="right-card">
+                <h2>Bills</h2>
+                <div id="bill-info" class="cards">
+                    <section><h3>Date: </h3><h3>Title: </h3><h3>Vote: </h3></section>
+                    <div class="bill-cards">
+                        <p id="bill-date"></p>
+                        <p id="bill-title"></p>
+                        <p id="bill-vote"></p>
+                    </div>
+                </div>
             </div>
         </div>
         <script type="module" src="./script.js"></script>

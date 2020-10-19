@@ -5,6 +5,7 @@ const autoList = document.querySelector('#autocomplete-list')
 const idName = document.querySelector('#id-name')
 const idState = document.querySelector('#id-state')
 const idParty = document.querySelector('#id-party')
+const lawmakerInfo = document.querySelector('#lawmaker-info')
 const billTitle = document.getElementById('bill-title')
 const billDate = document.querySelector('#bill-date')
 const billVote = document.querySelector('#bill-vote')
@@ -97,6 +98,12 @@ function createSugContainer(memberIndex) {
         idParty.innerText = getLawmakerInfo('party', memberIndex)
         getBillInfo(currentID)
     })
+    suggestionContainer.addEventListener('mouseenter', function(e){
+        event.target.style.backgroundColor = '#00FFFF';
+    })
+    suggestionContainer.addEventListener('mouseleave', function(e){
+        event.target.style.backgroundColor = 'white';
+    })
     return suggestionContainer
 }
 
@@ -136,22 +143,44 @@ function getBillInfo(id){
         beforeSend: function(xhr) {
             xhr.setRequestHeader("X-API-Key", "Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw")
         }, success: function(data){
-            let billInfo = data.results[0].votes[0]
+            let billInfo = data.results[0]
             let billTitle = data.results[0].votes[0].bill.title
             let billDate = data.results[0].votes[0].date
             let billVote = data.results[0].votes[0].position
             console.log(billInfo)
             console.log("Bill info data retrieval successful!")
-            // billTitle.innerText = billInfo
             displayBillInfo(billTitle, billDate, billVote)
         }
     });
 }
 
 function displayBillInfo(title, date, vote) {
+    for(let i; i<=5; i++){
+
+    }
     billTitle.innerText = title
     billDate.innerText = date
     billVote.innerText = vote
+}
+
+function makeBillCard() {
+    billCard = document.createElementw('div')
+    billCard.class = 'bill-card'
+
+    dateText = document.createElement('h3')
+    dateText.innerText = 'Date: '
+    billDate = document.createElement('p') 
+    billDate.class = 'bill-date'
+
+    titleText = document.createElement('h3')
+    titleText.innerText = 'Title: '
+    billTitle = document.createElement('p')
+    billTitle.class = 'bill-title'
+
+    voteText = document.createElement('h3')
+    voteText.innerText = 'Vote: '
+    billVote = document.createElement('p')
+    billVote.class = 'bill-vote'
 }
 
 //when user types in to search bar, the autocomplete process runs
