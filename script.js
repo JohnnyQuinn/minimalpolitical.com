@@ -183,13 +183,9 @@ function makeBillCard(date, title, vote) {
     billVote.id = 'bill-vote'
     billVote.innerText = vote
 
-    // const expandButton = document.createElement('button')
-    // expandButton.id = 'expand'
-    // expandButton.innerText = 'V'
-
     //style elements
     billCard.style.borderTop = 'solid'
-    // billCard.style.borderBottom = 'solid'
+    billCard.style.borderColor = 'dodgerblue'
     billCard.style.borderWidth = '0.75px'
     billCard.style.display = 'flex'
     billCard.style.flexDirection = 'row'
@@ -200,7 +196,6 @@ function makeBillCard(date, title, vote) {
     billCard.appendChild(billDate)
     billCard.appendChild(billTitle)
     billCard.appendChild(billVote)
-    // billCard.appendChild(expandButton)
 
     billCardsContainer.appendChild(billCard)
 }
@@ -210,14 +205,6 @@ function clearBillList() {
     while(billCardsContainer.firstChild){
         billCardsContainer.removeChild(billCardsContainer.firstChild)
     }
-}
-
-function truncateText(text, maxLength) {
-    let truncated = text
-    if (text.length > maxLength) {
-        truncated = text.substr(0,maxLength) + '...';
-    }
-    return truncated;
 }
 
 //when user types in to search bar, the autocomplete process runs
