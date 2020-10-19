@@ -16,6 +16,9 @@ let currentID
 Link uses parameters after the congress/v1/ 
 
 Key to access API: Hk6QVaUEQ453sdhadQMafiX9Ya5hblL7uwqVPEFw
+
+These functions retrieve a list of members in both the senate and the house
+and stores them in arrays
 */
 $.ajax({
     url: "https://api.propublica.org/congress/v1/116/senate/members.json",
@@ -134,7 +137,7 @@ function getLawmakerInfo(info, memberIndex) {
     }
 }
 
-//Takes in member id, then recieves most 20 most recently voted on bills
+//Takes in member id, then recieves 20 most recently voted on bills
 function getBillData(id){
     id = currentID
     $.ajax({
